@@ -60,8 +60,8 @@ fun HomeMhsView(
             CustomToppAppBar(
                 judul = "Daftar Mahasiswa",
                 showBackButton = false,
-                onBack = { },
-                modifier = Modifier
+                onBack = {},
+                modifier = modifier
             )
         },
         floatingActionButton = {
@@ -132,7 +132,7 @@ fun BodyHomeMhsView(
             ListMahasiswa(
                 listMhs = homeUiState.listMhs,
                 onClick = {
-                    onClick()
+                    onClick(it)
                     println(
                         it
                     )
@@ -147,7 +147,7 @@ fun BodyHomeMhsView(
 fun ListMahasiswa(
     listMhs: List<Mahasiswa>,
     modifier: Modifier = Modifier,
-    onItemClick: (String) -> Unit = { }
+    onClick: (String) -> Unit = { }
 ){
     LazyColumn(
         modifier = modifier
@@ -157,7 +157,7 @@ fun ListMahasiswa(
             itemContent = { mhs ->
                 CardMhs(
                     mhs = mhs,
-                    onClick = { onItemClick(mhs.nim) }
+                    onClick = { onClick(mhs.nim) }
                 )
             }
         )
