@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.week9.data.entity.Mahasiswa
 import com.example.week9.repository.RepositoryMhs
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -25,6 +26,7 @@ class HomeMhsViewModel (
         }
         .onStart {
             emit(HomeUiState(isLoading = true))
+            delay(900)
         }
         .catch {
             emit(

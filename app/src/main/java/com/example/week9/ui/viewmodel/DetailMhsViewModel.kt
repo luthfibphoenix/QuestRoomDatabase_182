@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.week9.data.entity.Mahasiswa
 import com.example.week9.repository.RepositoryMhs
 import com.example.week9.ui.navigation.DestinationDetail
 import kotlinx.coroutines.delay

@@ -41,23 +41,27 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.week9.data.entity.Mahasiswa
+import com.example.week9.ui.customwidget.CustomToppAppBar
+import com.example.week9.ui.viewmodel.HomeMhsViewModel
+import com.example.week9.ui.viewmodel.HomeUiState
+import com.example.week9.ui.viewmodel.PenyediaViewModel
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun HomeMhsView(
-    viewModel: HomeMhsViewModel = ViewModel(),
+    viewModel: HomeMhsViewModel = viewModel(factory = PenyediaViewModel.Factory),
     onAddMhs: () -> Unit = { },
-    onDetailClick: (String) -> unit = { },
+    onDetailClick: (String) -> Unit = { },
     modifier: Modifier = Modifier
 ){
     Scaffold(
         topBar = {
-            CustomTopAppBar(
+            CustomToppAppBar(
                 judul = "Daftar Mahasiswa",
                 showBackButton = false,
                 onBack = { },
-                modifier = modifier
+                modifier = Modifier
             )
         },
         floatingActionButton = {
@@ -74,7 +78,7 @@ fun HomeMhsView(
         }
     ){
         innerPadding ->
-        val uiState by viewModel.uiState.collectAsState()
+        val uiState by viewModel.homeUiState.collectAsState()
         BodyHomeMhsView(
             homeUiState = uiState,
             onClick = {
@@ -103,8 +107,8 @@ fun BodyHomeMhsView(
             }
         }
         homeUiState.isError -> {
-            LaunchedEffect(homeUiState) {
-                homeUiState.errorMessage.let{ ->
+            LaunchedEffect(homeUiState.errorMessage) {
+                homeUiState.errorMessage?.let{ message ->
                     coroutineScope.launch {
                         snackbarHostState.showSnackbar(message)
                     }
@@ -128,7 +132,7 @@ fun BodyHomeMhsView(
             ListMahasiswa(
                 listMhs = homeUiState.listMhs,
                 onClick = {
-                    onClick(it)
+                    onClick()
                     println(
                         it
                     )
@@ -160,6 +164,7 @@ fun ListMahasiswa(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardMhs(
     mhs : Mahasiswa,

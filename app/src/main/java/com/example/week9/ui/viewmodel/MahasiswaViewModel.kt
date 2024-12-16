@@ -20,7 +20,7 @@ class MahasiswaViewModel(private val repositoryMhs: RepositoryMhs) : ViewModel()
         )
     }
 
-    private fun valdateField(): Boolean {
+    private fun validateField(): Boolean {
         val event = uiState.mahasiswaEvent
         val errorState = FormErrorState(
             nim = if (event.nim.isNotEmpty()) null else "NIM tidak boleh kosong",
@@ -38,7 +38,7 @@ class MahasiswaViewModel(private val repositoryMhs: RepositoryMhs) : ViewModel()
 
     fun saveData() {
         val currentEvent = uiState.mahasiswaEvent
-        if (valdateField()) {
+        if (validateField()) {
             viewModelScope.launch {
                 try{
                     repositoryMhs.insertMhs(currentEvent.toMahasiswaEntity())
