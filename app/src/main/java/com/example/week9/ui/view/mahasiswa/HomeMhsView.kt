@@ -46,7 +46,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeMhsView(
-    viewModel: ViewModel = ViewModel(),
+    viewModel: HomeMhsViewModel = ViewModel(),
     onAddMhs: () -> Unit = { },
     onDetailClick: (String) -> unit = { },
     modifier: Modifier = Modifier
