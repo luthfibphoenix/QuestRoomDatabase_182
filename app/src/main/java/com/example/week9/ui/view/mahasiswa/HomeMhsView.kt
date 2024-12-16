@@ -42,6 +42,28 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.week9.data.entity.Mahasiswa
 import kotlinx.coroutines.launch
 
+
+@Composable
+fun ListMahasiswa(
+    listMhs: List<Mahasiswa>,
+    modifier: Modifier = Modifier,
+    onItemClick: (String) -> Unit = { }
+){
+    LazyColumn(
+        modifier = modifier
+    ){
+        items(
+            items = listMhs,
+            itemContent = { mhs ->
+                CardMhs(
+                    mhs = mhs,
+                    onClick = { onItemClick(mhs.nim) }
+                )
+            }
+        )
+    }
+}
+
 @Composable
 fun CardMhs(
     mhs : Mahasiswa,
