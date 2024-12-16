@@ -1,6 +1,7 @@
 package com.example.week9.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.week9.data.entity.Mahasiswa
 import com.example.week9.repository.RepositoryMhs
 import kotlinx.coroutines.flow.SharingStarted
@@ -35,7 +36,7 @@ class HomeMhsViewModel (
             )
         }
         .stateIn(
-            scope = viweModelScope,
+            scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = HomeUiState(
                 isLoading = true,
