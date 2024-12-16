@@ -38,10 +38,106 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.week9.data.entity.Mahasiswa
 import kotlinx.coroutines.launch
 
+
+@Composable
+fun HomeMhsView(
+    viewModel: ViewModel = ViewModel(),
+    onAddMhs: () -> Unit = { },
+    onDetailClick: (String) -> unit = { },
+    modifier: Modifier = Modifier
+){
+    Scaffold(
+        topBar = {
+            CustomTopAppBar(
+                judul = "Daftar Mahasiswa",
+                showBackButton = false,
+                onBack = { },
+                modifier = modifier
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onAddMhs,
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier.padding(16.dp)
+            ){
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Tambah Mahasiswa"
+                )
+            }
+        }
+    ){
+        innerPadding ->
+        val uiState by viewModel.uiState.collectAsState()
+        BodyHomeMhsView(
+            homeUiState = uiState,
+            onClick = {
+                onDetailClick(it)
+            },
+            modifier = modifier.padding(innerPadding)
+        )
+    }
+}
+
+@Composable
+fun BodyHomeMhsView(
+    homeUiState: HomeUiState,
+    onClick: (String) -> Unit = { },
+    modifier: Modifier = Modifier
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    when {
+        homeUiState.isLoading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ){
+                CircularProgressIndicator()
+            }
+        }
+        homeUiState.isError -> {
+            LaunchedEffect(homeUiState) {
+                homeUiState.errorMessage.let{ ->
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(message)
+                    }
+                }
+            }
+        }
+        homeUiState.listMhs.isEmpty() ->{
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Tidak ada data Mahasiswa.",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+        }
+        else -> {
+            ListMahasiswa(
+                listMhs = homeUiState.listMhs,
+                onClick = {
+                    onClick(it)
+                    println(
+                        it
+                    )
+                },
+                modifier = modifier
+            )
+        }
+    }
+}
 
 @Composable
 fun ListMahasiswa(
