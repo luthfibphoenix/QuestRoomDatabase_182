@@ -39,7 +39,7 @@ import com.example.week9.ui.viewmodel.PenyediaViewModel
 import kotlinx.coroutines.launch
 
 
-object DestinationInsert : AlamatNavigasi {
+object DestinasiInsert : AlamatNavigasi {
     override val route: String = "insert_mhs"
 }
 

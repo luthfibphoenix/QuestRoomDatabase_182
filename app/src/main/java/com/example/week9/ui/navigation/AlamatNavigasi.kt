@@ -4,18 +4,18 @@ interface AlamatNavigasi {
     val route: String
 }
 
-object Destination : AlamatNavigasi {
+object DestinasiHome : AlamatNavigasi {
     override val route = "home"
 }
 
-object DestinationDetail : AlamatNavigasi {
+object DestinasiDetail : AlamatNavigasi {
     override val route = "detail"
     const val NIM = "nim"
-    val routeWithArgs = "$route/{$NIM}"
+    val routeWithArg = "$route/{$NIM}"
 }
 
-object DestinationUpdate : AlamatNavigasi {
+object DestinasiUpdate : AlamatNavigasi {
     override val route = "update"
     const val NIM = "nim"
-    val routeWithArgs = "$route/{$NIM}"
+    val routeWithArg = "$route/{$NIM}"
 }

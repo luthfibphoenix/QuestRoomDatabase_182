@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.week9.data.entity.Mahasiswa
 import com.example.week9.repository.RepositoryMhs
-import com.example.week9.ui.navigation.DestinationDetail
+import com.example.week9.ui.navigation.DestinasiDetail
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ class UpdateMhsViewModel(
     var updateUIState by mutableStateOf(MhsUIState())
         private set
 
-    private val _nim: String = checkNotNull(savedStateHandle[DestinationDetail.NIM])
+    private val _nim: String = checkNotNull(savedStateHandle[DestinasiDetail.NIM])
 
     init {
         viewModelScope.launch {
