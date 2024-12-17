@@ -17,7 +17,9 @@ import com.example.week9.ui.viewmodel.PenyediaViewModel
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import com.example.week9.ui.customwidget.CustomToppAppBar
+import com.example.week9.ui.viewmodel.UpdateMhsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -27,16 +29,16 @@ import kotlinx.coroutines.withContext
 fun UpdateMhsView(
     onBack: () -> Unit,
     onNavigate: () -> Unit,
-    modifier: androidx.compose.ui.Modifier = Modifier,
-    viewModel: MahasiswaViewModel = viewModel(factory = PenyediaViewModel.Factory)
-){
-    val uiState = viewModel.updateUiState
-    val snackbarHostState = remember{ SnackbarHostState() }
+    modifier: Modifier = Modifier,
+    viewModel: UpdateMhsViewModel = viewModel(factory = PenyediaViewModel.Factory)
+) {
+    val uiState = viewModel.updateUIState
+    val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(uiState.snackbarMessage) {
         println("LaunchedEffect triggered")
-        uiState.snackbarMessage?.let {  message ->
+        uiState.snackbarMessage?.let { message ->
             println("Snackbar message: $message")
             coroutineScope.launch {
                 println("Launcing coroutine for snackbar")
@@ -52,7 +54,7 @@ fun UpdateMhsView(
 
     Scaffold(
         modifier = modifier,
-        snackbarHost = { androidx.compose.material3.SnackbarHost(hostState = snackbarHostState)},
+        snackbarHost = { androidx.compose.material3.SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             CustomToppAppBar(
                 judul = "Edit Mahasiswa",
@@ -60,13 +62,13 @@ fun UpdateMhsView(
                 onBack = onBack,
             )
         }
-    ){padding ->
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
                 .padding(16.dp)
-        ){
+        ) {
             InsertBodyMhs(
                 uiState = uiState,
                 onValueChange = { updatedEvent ->

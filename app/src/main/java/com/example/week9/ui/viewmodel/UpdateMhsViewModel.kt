@@ -18,14 +18,14 @@ class UpdateMhsViewModel(
     private val repositoryMhs: RepositoryMhs
 ) : ViewModel() {
 
-    var updateUiState by mutableStateOf(MhsUIState())
+    var updateUIState by mutableStateOf(MhsUIState())
         private set
 
     private val _nim: String = checkNotNull(savedStateHandle[DestinationDetail.NIM])
 
     init {
         viewModelScope.launch {
-            updateUiState = repositoryMhs.getMhs(_nim)
+            updateUIState = repositoryMhs.getMhs(_nim)
                 .filterNotNull()
                 .first()
                 .toUIStateMhs()
@@ -33,13 +33,13 @@ class UpdateMhsViewModel(
     }
 
     fun updateState(mahasiswaEvent: MahasiswaEvent){
-        updateUiState = updateUiState.copy(
-            mahasiswaEvent = mahasiswaEvent
+        updateUIState = updateUIState.copy(
+            mahasiswaEvent = mahasiswaEvent,
         )
     }
 
     fun validateFields() : Boolean {
-        val event = updateUiState.mahasiswaEvent
+        val event = updateUIState.mahasiswaEvent
         val errorState = FormErrorState(
             nim = if (event.nim.isNotEmpty()) null else "NIM tidak boleh kosong",
             nama = if (event.nama.isNotEmpty()) null else "Nama tidak boleh kosong",
@@ -48,8 +48,37 @@ class UpdateMhsViewModel(
             kelas = if (event.kelas.isNotEmpty()) null else "Kelas tidak boleh kosong",
             angkatan = if (event.angkatan.isNotEmpty()) null else "Angkatan tidak boleh kosong",
         )
-        updateUiState = updateUiState.copy(isEntryValid = errorState)
+        updateUIState = updateUIState.copy(isEntryValid = errorState)
         return errorState.invalid()
+    }
+
+    fun updateData(){
+        val currentEvent = updateUIState.mahasiswaEvent
+
+        if (validateFields()) {
+            viewModelScope.launch {
+                try {
+                    repositoryMhs.updateMhs(currentEvent.toMahasiswaEntity())
+                    updateUIState = updateUIState.copy(
+                        snackbarMessage = "Data Berhasil diupdate",
+                        mahasiswaEvent = MahasiswaEvent(),
+                        isEntryValid = FormErrorState()
+                    )
+                    println("snackbarMessage diatur: ${updateUIState.snackbarMessage}")
+                } catch (e: Exception) {
+                    updateUIState = updateUIState.copy(
+                        snackbarMessage = "Data gagal diupdate"
+                    )
+                }
+            }
+        } else {
+            updateUIState = updateUIState.copy(
+                snackbarMessage = "Data gagal diupdate"
+            )
+        }
+    }
+    fun resetSnackbarMessage() {
+        updateUIState = updateUIState.copy(snackbarMessage = null)
     }
 }
 fun Mahasiswa.toUIStateMhs(): MhsUIState = MhsUIState(
